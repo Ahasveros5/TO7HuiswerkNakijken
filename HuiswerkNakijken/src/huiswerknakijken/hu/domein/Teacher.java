@@ -1,5 +1,5 @@
 package huiswerknakijken.hu.domein;
 
-public class Leraar {
+public class Teacher extends Person {
  //test
 }
