@@ -1,6 +1,6 @@
 package huiswerknakijken.hu.domein;
 
-import huiswerknakijken.hu.domein.QuestionTypes.*;
+import java.util.ArrayList;
 
 
 public class Question 
@@ -8,14 +8,12 @@ public class Question
 	
 	protected int nr;
 	protected String description;
-	private MultipleChoice MC;
-	private OpenQuestion OQ;
-	private Picture pic;
-	private ShortWord SW;
-	
+	private ArrayList<Answer> answers = new ArrayList<Answer>();
+
 	public Question(){
 		
 	}
+	
 	
 	public int getNr() {
 		return nr;
@@ -29,28 +27,11 @@ public class Question
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public MultipleChoice getMC() {
-		return MC;
+	public ArrayList<Answer> getAnswers() {
+		return answers;
 	}
-	public void setMC(MultipleChoice mC) {
-		MC = mC;
+	public void setAnswers(ArrayList<Answer> answers) {
+		this.answers = answers;
 	}
-	public OpenQuestion getOQ() {
-		return OQ;
-	}
-	public void setOQ(OpenQuestion oQ) {
-		OQ = oQ;
-	}
-	public Picture getPic() {
-		return pic;
-	}
-	public void setPic(Picture pic) {
-		this.pic = pic;
-	}
-	public ShortWord getSW() {
-		return SW;
-	}
-	public void setSW(ShortWord sW) {
-		SW = sW;
-	}
+	
 }
