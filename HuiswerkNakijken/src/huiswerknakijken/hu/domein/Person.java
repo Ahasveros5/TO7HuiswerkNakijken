@@ -2,15 +2,18 @@ package huiswerknakijken.hu.domein;
 
 public class Person {
 
-	private int age;
-	private String firstName;
-	private String infix; //tussennaam, van/ter/de/ etc...
-	private String lastName;
-	private Address address;
-	private String phoneNumber;
-	private String eMail;
-	private boolean male;
+	protected int age;
+	protected String firstName;
+	protected String infix; //tussennaam, van/ter/de/ etc...
+	protected String lastName;
+	protected Address address;
+	protected String phoneNumber;
+	protected String eMail;
+	protected boolean male;
 	
+	public  Person(){
+		
+	}
 	
 	
 	public int getAge() {
