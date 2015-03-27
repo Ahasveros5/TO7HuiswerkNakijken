@@ -7,8 +7,9 @@ import java.util.ArrayList;
 
 public class Class {
 
-	private ArrayList<Student> students;
-	private Teacher teacher;
+	private ArrayList<Student> students = new ArrayList<Student>();
+	private ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+	private Course course;
 	
 	public ArrayList<Student> getStudents() {
 		return students;
@@ -16,11 +17,17 @@ public class Class {
 	public void setStudents(ArrayList<Student> students) {
 		this.students = students;
 	}
-	public Teacher getTeacher() {
-		return teacher;
+	public ArrayList<Teacher> getTeacher() {
+		return teachers;
 	}
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
+	public void setTeacher(ArrayList<Teacher> teachers) {
+		this.teachers = teachers;
+	}
+	public Course getCourse() {
+		return course;
+	}
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 	
 	

@@ -1,6 +1,9 @@
 package huiswerknakijken.hu.domein;
 
 public class Grade {
-//ik vraag me heel erg af of deze klasse nodig is, in principe gaat dit alleen een float
-//vast houden die dan gelinkt wordt met Homework, waarom kan dat niet meteen daarin?
+//hier moeten meerdere soorten gradering in zitten bijv:
+	//onvoldoende, matig, voldoende, ruimvoldoende, goed
+	//1 t/m 10
+	//F,E,D,C,B,A
+	//verzin wat leuks..
 }
