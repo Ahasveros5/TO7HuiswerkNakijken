@@ -1,7 +1,5 @@
 package huiswerknakijken.hu.domein;
 
+public class Course {
 
-public interface Question 
-{
-	
 }
