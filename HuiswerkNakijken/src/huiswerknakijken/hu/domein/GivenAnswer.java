@@ -1,5 +1,6 @@
 package huiswerknakijken.hu.domein;
 
-public class Anwser {
-
+public class GivenAnswer 
+{
+	
 }
