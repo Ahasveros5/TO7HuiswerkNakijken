@@ -6,8 +6,8 @@ import java.sql.DriverManager;
 public class OracleConnection {
 	private static OracleConnection instance = new OracleConnection();
 	private static final String url = "jdbc:oracle:thin:@ondora01.hu.nl:8521:cursus01";
-	private static final String username = "tho_soa_2015_team1";
-	private static final String password = "tho_soa_2015_team1";
+	private static final String username = "THO_SOA_2015_TEAM1";
+	private static final String password = "THO_SOA_2015_TEAM1";
 	
 	private static final String DRIVER_CLASS = "oracle.jdbc.driver.OracleDriver";
 	
