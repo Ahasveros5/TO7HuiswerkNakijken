@@ -4,7 +4,6 @@ public class Person {
 
 	protected int age;
 	protected String firstName;
-	protected String infix; //tussennaam, van/ter/de/ etc...
 	protected String lastName;
 	protected Address address;
 	protected String phoneNumber;
@@ -27,12 +26,6 @@ public class Person {
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-	}
-	public String getInfix() {
-		return infix;
-	}
-	public void setInfix(String infix) {
-		this.infix = infix;
 	}
 	public String getLastName() {
 		return lastName;
