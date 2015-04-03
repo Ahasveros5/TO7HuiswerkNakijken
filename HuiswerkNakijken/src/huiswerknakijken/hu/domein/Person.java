@@ -2,24 +2,33 @@ package huiswerknakijken.hu.domein;
 
 public class Person {
 
-	protected int age;
 	protected String firstName;
 	protected String lastName;
+	protected String birthdate;
 	protected Address address;
 	protected String phoneNumber;
 	protected String eMail;
 	protected boolean male;
+	protected String password;
+	protected int ID;
 	
 	public  Person(){
 		
 	}
 	
-	
-	public int getAge() {
-		return age;
+	public int getID(){
+		return ID;
 	}
-	public void setAge(int age) {
-		this.age = age;
+	public void setID(int id){
+		ID = id;
+	}
+	
+	
+	public String getBirthDate() {
+		return birthdate;
+	}
+	public void setAge(String birthdate) {
+		this.birthdate = birthdate;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -45,10 +54,10 @@ public class Person {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String geteMail() {
+	public String getEmail() {
 		return eMail;
 	}
-	public void seteMail(String eMail) {
+	public void setEmail(String eMail) {
 		this.eMail = eMail;
 	}
 	public boolean isMale() {
@@ -57,7 +66,12 @@ public class Person {
 	public void setMale(boolean male) {
 		this.male = male;
 	}
-	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 	
 	

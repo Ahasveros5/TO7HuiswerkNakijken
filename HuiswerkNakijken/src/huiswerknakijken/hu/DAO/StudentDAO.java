@@ -12,6 +12,7 @@ import java.util.List;
 
 import huiswerknakijken.hu.domein.Student;
 import huiswerknakijken.hu.util.OracleConnectionPool;
+import huiswerknakijken.hu.util.Util;
 
 public class StudentDAO implements DAOInterface<Student> {
 	public List<Student> retrieveAll(int layerLevel) {
@@ -31,20 +32,14 @@ public class StudentDAO implements DAOInterface<Student> {
 		return Students;
 	}
 	
-	public List<Student> retrieveAllMatching(String Studentname, String email, String firstName, String lastName, int role, int layerLevel) {
+	public List<Student> retrieveAllMatching(String email, String firstName, String lastName, int layerLevel) {
 		ResultSet rs = null;
 		ArrayList<Student> Students = null;
 		Connection connection = OracleConnectionPool.getConnection();
 		try {
 			PreparedStatement statement = null;
-			if(role != 0){
-				statement = connection.prepareStatement("SELECT * FROM Students WHERE lower(Studentname) LIKE lower(?) AND lower(email) LIKE lower(?) AND lower(first_name) LIKE lower(?) AND lower(last_name) LIKE lower(?) AND role_id = ?");
-				statement.setInt(5, role);
-			}
-			else{
-				statement = connection.prepareStatement("SELECT * FROM Students WHERE lower(Studentname) LIKE lower(?) AND lower(email) LIKE lower(?) AND lower(first_name) LIKE lower(?) AND lower(last_name) LIKE lower(?)");
-			}
-			statement.setString(1, "%"+Studentname+"%");
+			statement = connection.prepareStatement("SELECT * FROM Students WHERE lower(email) LIKE lower(?) AND lower(first_name) LIKE lower(?) AND lower(last_name) LIKE lower(?) AND role_id = ?");
+
 			statement.setString(2, "%"+email+"%");
 			statement.setString(3, "%"+firstName+"%");
 			statement.setString(4, "%"+lastName+"%");
@@ -61,12 +56,13 @@ public class StudentDAO implements DAOInterface<Student> {
 	}
 
 	@Override
-	public boolean delete(Student u) {
+	public boolean delete(Student s) {
+		System.out.println("Deleting NYI");
 		return false;
 	}
 
 	@Override
-	public boolean add(Student u) {
+	public boolean add(Student s) {
 		boolean b = false;
 		Connection connection = OracleConnectionPool.getConnection();
 		try {
@@ -76,26 +72,24 @@ public class StudentDAO implements DAOInterface<Student> {
 		}
 		try {
 
-			String sql = "INSERT INTO StudentS(Studentname, password, first_name, last_name, phone, role_id, email, credits, status) VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO StudentS(first_name, last_name, birthdate, phone, email, gender, password) VALUES (?,?,?,?,?,?,?)";
 			String generatedColumns[] = { "Student_ID" };
 			PreparedStatement statement = connection.prepareStatement(sql, generatedColumns);
-			statement.setString(1, u.getStudentname());
-			statement.setString(2, u.getPassword());
-			statement.setString(3, u.getFirstName());
-			statement.setString(4, u.getLastName());
-			statement.setString(5, u.getPhonenumber());
-			statement.setInt(6, u.getRole().getIndex()); // role id
-			statement.setString(7, u.getEmail());
-			statement.setDouble(8,u.getCredits());
-			statement.setInt(9,u.getStatus().index());
+			statement.setString(1, s.getFirstName());
+			statement.setString(2, s.getLastName());
+			statement.setString(3, s.getBirthDate());
+			statement.setString(4, s.getPhoneNumber());
+			statement.setString(5, s.getEmail());
+			statement.setInt(6, Util.boolToInt(s.isMale())); // role id
+			statement.setString(7, s.getPassword());
 			statement.executeUpdate();
-			int StudentID = 0;
+			//int StudentID = 0;
 
-			ResultSet rsid = statement.getGeneratedKeys();
+			/*ResultSet rsid = statement.getGeneratedKeys();
 			if (rsid != null && rsid.next()) {
 				StudentID = rsid.getInt(1);
 				u.setStudentid(StudentID);
-			}
+			}*/
 			statement.close();
 
 
@@ -122,23 +116,21 @@ public class StudentDAO implements DAOInterface<Student> {
 	}
 
 	@Override
-	public boolean update(Student u) {
+	public boolean update(Student s) {
 		boolean b = false;
 		Connection connection = OracleConnectionPool.getConnection();
 		//Service.getService().getStudents().put(u.getStudentid(), u);
 		try {
 			connection.setAutoCommit(false);
-			PreparedStatement statement = connection.prepareStatement("UPDATE Students SET Studentname=?, password=?, first_name=?, last_name=?, phone=?,role_id=?,email=?,credits=?, status=? WHERE Student_id=?");
-			statement.setString(1, u.getStudentname());
-			statement.setString(2, u.getPassword());
-			statement.setString(3, u.getFirstName());
-			statement.setString(4, u.getLastName());
-			statement.setString(5, u.getPhonenumber());
-			statement.setInt(6, u.getRole().getIndex()); // role id
-			statement.setString(7, u.getEmail());
-			statement.setDouble(8, u.getCredits());
-			statement.setInt(9, u.getStatus().index());
-			statement.setInt(10, u.getStudentid());
+			PreparedStatement statement = connection.prepareStatement("UPDATE Students SET first_name=?, last_name=?, birth_date=?, phone=?,email=?,gender=?, password=? WHERE id=?");
+			statement.setString(1, s.getFirstName());
+			statement.setString(2, s.getLastName());
+			statement.setString(3, s.getBirthDate());
+			statement.setString(4, s.getPhoneNumber());
+			statement.setString(5, s.getEmail());
+			statement.setInt(6, Util.boolToInt(s.isMale())); // role id
+			statement.setString(7, s.getPassword());
+			statement.setInt(8, s.getID());
 			statement.executeUpdate();
 			statement.close();
 
@@ -157,17 +149,13 @@ public class StudentDAO implements DAOInterface<Student> {
 		return b;
 	}
 
-	public Student retrieve(String s, int layerLevel) {
-		int uid = Integer.parseInt(s);
-		return retrieve(uid, layerLevel);
-	}
 
-	public Student retrieve(int Studentid, int layerLevel) {
+	public Student retrieve(int id, int layerLevel) {
 		Student retrievedStudent = new Student();
 		Connection connection = OracleConnectionPool.getConnection();
 		try {
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Students WHERE Student_id = ?");
-			statement.setInt(1, Studentid);
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Students WHERE id = ?");
+			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			ArrayList<Student> Student = resultSetExtractor(rs, layerLevel, connection);
 			retrievedStudent = Student.get(0);
@@ -181,11 +169,11 @@ public class StudentDAO implements DAOInterface<Student> {
 
 	}
 	
-	public Student retrieve(int Studentid, int layerLevel, Connection connection) {
+	public Student retrieve(int id, int layerLevel, Connection connection) {
 		Student retrievedStudent = new Student();
 		try {
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Students WHERE Student_id=?");
-			statement.setInt(1, Studentid);
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Students WHERE id=?");
+			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			ArrayList<Student> Student = resultSetExtractor(rs, layerLevel, connection);
 			retrievedStudent = Student.get(0);
@@ -217,7 +205,7 @@ public class StudentDAO implements DAOInterface<Student> {
 		return retrievedStudent;
 	}
 
-	public Student retrieveByStudentname(String s, int layerLevel) {
+	/*public Student retrieveByStudentname(String s, int layerLevel) {
 		Student retrievedStudent = null;
 		Connection connection = OracleConnectionPool.getConnection();
 		try {
@@ -234,7 +222,7 @@ public class StudentDAO implements DAOInterface<Student> {
 			e.printStackTrace();
 		}
 		return retrievedStudent;
-	}
+	}*/
 
 	private ArrayList<Student> resultSetExtractor(ResultSet rs, int layerLevel, Connection connection) {
 		ArrayList<Student> extractedStudents = new ArrayList<Student>();
@@ -252,32 +240,17 @@ public class StudentDAO implements DAOInterface<Student> {
 				}*/
 				if (notInCache) {
 					Student u = new Student();
-					u.setStudentid(StudentID);
+					u.setID(StudentID);
 					u.setFirstName(rs.getString("first_name"));
 					u.setLastName(rs.getString("last_name"));
 					u.setEmail(rs.getString("email"));
 					u.setPassword(rs.getString("password"));
-					u.setPhonenumber(rs.getString("phone"));
-					u.setLayerLevel(layerLevel);
-					u.setCredits(rs.getDouble("credits"));
-					int role = rs.getInt("role_id");
-					for (StudentRole us : StudentRole.values()) {
-						if (us.getIndex() == role) {
-							u.setRole(us);
-						}
-					}
-					int status = rs.getInt("status");
-
-					for (StudentStatus us : StudentStatus.values()) {
-						if (us.index() == status) {
-							u.setStatus(us);
-						}
-					}
-					
-					u.setStudentname(rs.getString("Studentname"));
+					u.setPhoneNumber(rs.getString("phone"));
+					u.setMale(Util.intToBool(rs.getInt("gender")));
+					//u.setLayerLevel(layerLevel);
 
 					if (layerLevel > 1) {
-						AddressDAO adao = new AddressDAO();
+						/*AddressDAO adao = new AddressDAO();
 						String sqlKoppel;
 						PreparedStatement statementKoppel;
 						sqlKoppel = "SELECT * FROM Student_ADDRESSES WHERE Student_id = ? AND date_to IS NULL";
@@ -296,15 +269,14 @@ public class StudentDAO implements DAOInterface<Student> {
 							}
 							u.getAddresses().add(a);
 						}
-						statementKoppel.close();
+						statementKoppel.close();*/
 					}
 
 					if (layerLevel > 2) {
-						AuctionDAO audao = new AuctionDAO();
-						u.setAuctions((ArrayList<Auction>) audao.retrieveAllBySeller(u,AuctionStatus.ALL,1));
+						
 					}
 
-					cacheStudents.put(u.getStudentid(), u);
+					//cacheStudents.put(u.getStudentid(), u);
 					extractedStudents.add(u);
 				}
 			}
@@ -323,6 +295,7 @@ public class StudentDAO implements DAOInterface<Student> {
 
 	@Override
 	public Student retrieve(String s) {
-		return retrieve(s, 10);
+		System.out.println("ERROR NOT WORKING METHOD RETRIEVE(string)");
+		return null;//retrieve(s, 10);
 	}
 }
